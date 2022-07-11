@@ -21,9 +21,9 @@ contract MyEpicNFT is ERC721URIStorage {
    string[] secondWords = ["IS", "HAS", "FAITH", "WAS", "WILL", "BEFORE"];
    string[] thirdWords = ["GOOD", "PLAN", "WAY", "DEAL", "DESIRE", "HOPE"];
 
-   event NewEpicNFTMinted(address sender, uint256 tokenId);
+   event NewEpicNFTMinted(address sender, uint256 tokenId, string finalTokenUri);
 
-   constructor() ERC721("ChavesNFT", "CHAVO") {
+   constructor() ERC721("Incredible NFTs", "Incredible") {
       console.log("My NFT contract!");
    }
 
@@ -126,6 +126,6 @@ contract MyEpicNFT is ERC721URIStorage {
          msg.sender
       );
 
-      emit NewEpicNFTMinted(msg.sender, newItemId);
+      emit NewEpicNFTMinted(msg.sender, newItemId, finalTokenUri);
    }
 }
