@@ -76,9 +76,6 @@ const App = () => {
         const signer = provider.getSigner()
         const connectedContract = new ethers.Contract(CONTRACT_ADDRESS, MyEpicNft.abi, signer)
 
-        // Aqui está o tempero mágico.
-        // Isso essencialmente captura nosso evento quando o contrato lança
-        // Se você está familiar com webhooks, é bem parecido!
         connectedContract.on("NewEpicNFTMinted", (from, tokenId, finalTokenUri) => {
           console.log(from, tokenId.toNumber())
           console.log('metadata', finalTokenUri)
@@ -95,37 +92,34 @@ const App = () => {
     }
   }
 
-
   const askContractToMintNft = async () => {
-  
-  try {
-    const { ethereum } = window;
-    if (ethereum) {
-      const provider = new ethers.providers.Web3Provider(ethereum);
-      const signer = provider.getSigner();
-      const connectedContract = new ethers.Contract(
-        CONTRACT_ADDRESS,
-        MyEpicNft.abi,
-        signer
-      );
-      console.log("Vai abrir a carteira agora para pagar o gás...");
-      let nftTxn = await connectedContract.makeAnEpicNFT();
-      setLoading(true);
-      console.log("Cunhando...espere por favor.");
-      await nftTxn.wait();
-      setLoading(false);
-      console.log(
-        `Cunhado, veja a transação: https://goerli.etherscan.io/tx/${nftTxn.hash}`
-      );
-    } else {
-      console.log("Objeto ethereum não existe!");
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const connectedContract = new ethers.Contract(
+          CONTRACT_ADDRESS,
+          MyEpicNft.abi,
+          signer
+        );
+        console.log("Vai abrir a carteira agora para pagar o gás...");
+        let nftTxn = await connectedContract.makeAnEpicNFT();
+        setLoading(true);
+        console.log("Cunhando...espere por favor.");
+        await nftTxn.wait();
+        setLoading(false);
+        console.log(
+          `Cunhado, veja a transação: https://goerli.etherscan.io/tx/${nftTxn.hash}`
+        );
+      } else {
+        console.log("Objeto ethereum não existe!");
+      }
+    } catch (error) {
+      console.log(error);
     }
-  } catch (error) {
-    console.log(error);
-  }
-};
+  };
 
-  // Métodos para Renderizar
   const renderNotConnectedContainer = () => (
     <button onClick={connectWallet} className="cta-button connect-wallet-button">
       Connect
@@ -135,9 +129,7 @@ const App = () => {
   useEffect(() => {
     checkIfWalletIsConnected();
   }, []);
-  /*
-   * Adicionei um render condicional! Nós não queremos mostrar o Connect to Wallet se já estivermos conectados
-   */
+
   return (
     <div className="App">
       <div className="container">
@@ -197,4 +189,5 @@ const App = () => {
     </div>
   );
 };
+
 export default App;
